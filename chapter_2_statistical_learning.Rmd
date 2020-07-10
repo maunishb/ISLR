@@ -1,0 +1,20 @@
+---
+title: "islr_chapter_2_statistical_learning"
+author: "Maunish Barvalia"
+date: '2020-07-09'
+output: html_document
+---
+
+```{r lets install the package}
+install.packages("ISLR")
+library(ISLR)
+```
+the ls() function can help us to list all the objects.
+rm() can be used to remove objects
+cor() can be used to compute the correlation between two variables
+
+not sure what outer() does, 
+contour() plots x, y and z
+image() works same way as contour(), but color coded based on z-value, wow!, this is aslo known as heatmap!
+persp() can also be used for 3D plots. Here, the coordinates are theta and phi
+                             

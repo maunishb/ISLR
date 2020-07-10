@@ -1,0 +1,405 @@
+---
+title: "probabity"
+author: "Maunish Barvalia"
+date: '2020-03-28'
+output: html_document
+---
+
+```{r Discrete probability}
+beads <- rep(c("red", "blue"), times = c(2,3))
+beads
+sample(beads,1)
+
+# Monte carlo simulation
+# Practically equivalent to identify what is large enough
+
+# replicate function
+
+B <- 10000
+events <- replicate(B, sample(beads,1))
+table(events)
+prop.table(table(events))
+
+# Use Montecarlo simulations to predict the p-value where it is hard to get the exact p-value
+# sample works without replacement 
+
+table(sample(beads, 10000, replace = TRUE))
+b <- sample(beads, 5)
+c <- sample(beads, 5)
+
+a
+b
+c
+# You can also apply mean to a catagorical variable
+
+mean(beads == "blue")
+
+# independence ==> coin tosses
+# independence ==> pick beads from an urn with  replacement'
+# not independent  ==> pick beads from an urn without replacement ==> conditional probablity
+# not independent ==> card games 
+
+x <- sample(beads, 5)
+x[1]
+x[2]
+```
+
+
+```{r Permutations and Combinations}
+#What is the probabilty of a flush in poker
+choose(13, 5)/choose(52,5)
+# Create a deck of cards in R using expand.grid and paste() 
+
+number <- "Three"
+suit <- "Hearts"
+paste(number, suit)
+expand.grid(pants = c("blue", "black"), shirt = c("white", "grey", "plaid"))
+rm(suits)
+
+suits <- c("Diamonds", "Clubs", "Hearts", "Spades")
+numbers <- c("Ace", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King")
+deck <- expand.grid(number = numbers, suit = suits)
+str(deck)
+deck <- paste(deck$number, deck$suit)
+str(deck)
+
+head(deck)
+#What proportion of the deck is kings
+kings <- paste("King", suits)
+mean(deck %in% kings)
+)
+```
+
+
+```{r Nandita plot}
+install.packages("ggplot2")
+library(ggplot2)
+
+df <- read.table(
+  "grw.csv", 
+  row.names = NULL, 
+  header = T, 
+  sep = ",", 
+  as.is = TRUE, 
+  na.strings = "NA", 
+  quote = "\"", 
+  stringsAsFactors = FALSE   
+)
+
+p1 <- ggplot(data = df, mapping =  aes(x = Year, y = Paid.memberships.in.mil.)) + geom_point(size = 3) +
+  geom_smooth(method="auto", ) + theme_bw() + ylab("Paid memberships in million") + 
+  scale_x_continuous(breaks = df$Year) + ggtitle("Growth in Netflix paid memberships")
+ggsave("Netflix_growth_membership.pdf", p1, width = 6, height = 4)
+
+scale_x_continuous(breaks = round(seq(min(dat$x), max(dat$x), by = 0.5),1))
+
+```
+```{r Load AneuTreat}
+library(ggplot2)
+library(dplyr)
+library(forcats)
+install.packages("cowplot")
+library(cowplot)
+df <- read.csv("AneuTreat_revenue_Y6_to_Y10.csv", sep = ",", header = TRUE, stringsAsFactors = FALSE)
+str(df)
+df$Revenue <- as.numeric(df$Revenue)
+
+is.character(df$Revenue)
+df$Revenue
+df$Revenue <- gsub(",","",df$Revenue)
+df <- df %>% mutate(time = paste0(as.character(Year), as.character(Quarter))) %>% mutate(time = fct_relevel(time, "6Q1", "6Q2", "6Q3", "6Q4", "7Q1", "7Q2", "7Q3", "7Q4", "8Q1", "8Q2", "8Q3", "8Q4", "9Q1", "9Q2", "9Q3", "9Q4", "10Q1", "10Q2", "10Q3", "10Q4"))
+
+ggplot(data = df, aes(x = time , y = Revenue)) +  geom_line(aes(group = 1)) + theme_classic()
+g <- ggplot(data = df, aes(x = time , y = Revenue)) +  geom_line(aes(group = 1), color = "steelblue", size  = 2) + theme_bw()
+g
+save_plot(filename = "Aneutreat_revenue_ver2.pdf", g)
+```
+
+
+```{r Permutations and combinations}
+# joining strings with paste
+number <- "Three"
+suit <- "Hearts"
+str(paste(number, suit))
+
+# joining vectors element-wise with paste
+str(paste(letters[1:5], as.character(1:5)))
+
+# generates combination of 2 vectors
+expand.grid(pants = c("blue", "black"), shirt = c("white", "grey", "plaid"))
+```
+
+
+```{r Generating deck of cards}
+suits <- c("Diamonds", "Clubs", "Hearts", "Spades")
+numbers <- c("Ace", "Deuce", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King")
+deck <- expand.grid(number = numbers, suit = suits)
+deck <- paste(deck$number, deck$suit)
+deck
+
+# probability of drawing a king
+kings <- paste("King", suits)
+mean(deck %in% kings)
+kings
+```
+
+```{r Permutations and Combinations}
+# not correct for phone numbers
+library(gtools)
+permutations(5,2)
+all_phone_numbers <- permutations(10, 7, v = 0:9)
+str(all_phone_numbers)
+n <- nrow(all_phone_numbers)
+index <- sample(n, 5)
+all_phone_numbers[index, ]
+tail(all_phone_numbers)
+permutations(3,2)
+combinations(3,2)
+```
+
+
+```{r Probabilty of choosing a second king given that one king is drawn}
+# All possible outcomes
+hands <- permutations(52, 2, v = deck)
+first_card <- hands[,1]
+second_card <- hands[,2]
+sum(first_card %in% kings)
+sum(first_card %in% kings & second_card %in% kings) / sum(first_card %in% kings)
+``` 
+
+```{ Probability of a natural 21 in blackjack}
+deck
+aces <- paste("Ace", suits)
+aces
+face_card <- c("Ten", "Jack", "Queen", "King")
+face_card <- expand.grid(number = face_card, suit = suits)
+face_card <- paste(face_card$number, face_card$suit)
+face_card
+
+hands <- permutations(52, 2, v = deck)
+first_card <- hands[,1]
+second_card <- hands[,2]
+
+sum(first_card %in% face_card)
+length(first_card)
+
+mean(hands[,1] %in% aces & hands[,2] %in% facecard)
+
+mean((hands[,1] %in% aces & hands[,2] %in% facecard)|(hands[,2] %in% aces & hands[,1] %in% facecard))
+
+```
+
+```{r For montecarlo simulations}
+hand <- sample(deck,2)
+B <- 10000
+
+results <- replicate(B, { 
+  hand <- sample(deck,2)
+  (hand[1] %in% aces & hand[2] %in% facecard) | (hand[2] %in% aces & hand[1] %in% facecard)
+})
+
+```
+
+```{r Birthday problem}
+
+n <- 50
+bdays <- sample(1:365, n, replace = TRUE) # generate n random birthdays
+
+any(duplicated(bdays))
+B <- 10000
+results <- replicate(B, {
+    bdays <- sample(1:365, n, replace = TRUE)
+    any(duplicated(bdays))
+})
+mean(results)
+
+```
+
+
+```{r Sapply}
+# Saply allows element wise comparision
+
+# function for shared birthday acorss n people
+compute_prob <- function(n, B = 10000) {
+  same_day <- replicate(B, {
+    bdays <- sample(1:365, n, replace = TRUE)
+    any(duplicated(bdays))
+  })
+  mean(same_day)
+} 
+
+n <- seq(1, 60)
+
+prob <- sapply(n, compute_prob)
+plot(prob, n)
+
+# function to compute exact probabities
+
+
+exact_prob <- function(n) {
+  prob_unique <- seq(365, (365-n+1))/365
+  1 - prod(prob_unique)
+}
+
+eprob <- sapply(n, exact_prob)
+plot(prob, n)
+lines(eprob, n, col = "red")
+
+
+
+```
+
+```{r Stability of montecarlo simulation}
+B <- 10 ^ seq(1, 5, len = 100)
+
+# compute the probabilty of the birthday problem
+# input n
+
+compute_prob <- function(B, n = 75) {
+  same_day <- replicate(B, {
+    bdays <- sample(1:365, n, replace = TRUE)
+    any(duplicated(bdays))
+  })
+  mean(same_day)
+}
+
+prob <- sapply(B, compute_prob)  
+plot(log10(B), prob, type = "l")
+
+```
+
+
+```{r the monty hall problem}
+B <- 10000
+switch <- replicate(B, {
+  doors <- as.character(1:3)
+  prize <- sample(c("car", "goat", "goat"))
+  prize_door <- doors[prize == "car"]
+  my_pick <- sample(doors, 1)
+  show <- sample(doors[!doors %in% c(my_pick, prize_door)], 1)
+  stick <- my_pick
+  switch <- doors[!doors %in% c(my_pick, show)]
+  #stick == prize_door
+  switch == prize_door
+})
+
+
+mean(stick)
+mean(switch)
+```
+
+```{r cumulative distribution function}
+library(dplyr)
+library(dslabs)
+#install.packages("dslabs")
+data("heights")
+str(heights)
+x <- heights %>% filter(sex == "Male") %>% .$height
+F <- function(a) mean( x <= a)
+1- F(70.5)
+
+# beteween a and b
+# F(b) - F(a)
+
+```
+```{r normal distribution}
+library(ggplot2)
+x <- seq(-4, 4, length = 100)
+data.frame(x, f = dnorm(x)) %>% ggplot(aes(x,f)) + geom_line()
+
+# Coming back to the height problem
+x <- heights %>% filter(sex=="Male") %>% pull(height)
+
+# generate the simulated data using normal distribution
+n <- length(x)
+avg <- mean(x)
+s <- sd(x)
+simulated_heights <- rnorm(n, avg, s)
+
+data.frame(simulated_heights = simulated_heights) %>% 
+  ggplot(aes(simulated_heights)) + 
+           geom_histogram(color = "black", binwidth = 2)
+
+# Is the tallest person over 7 feet?
+B <- 10000
+tallest <- replicate(B, {
+  simulated_data <- rnorm(n, avg, s)
+  max(simulated_data)
+
+})
+mean(tallest >= 7*12)
+```
+
+
+```{r other distribution functions}
+# t-distribution
+x <- seq(-4, 4, length = 100)
+
+data.frame(x, f = dt(x, Inf)) %>% ggplot(aes(x,f)) + geom_line()
+?dt
+```
+
+```{r Questions}
+avg <- 20.9
+s <- 5.7
+set.seed(16)
+act_scores <- rnorm(n = 10000, mean = avg, sd = s)
+mean(act_scores)
+sd(act_scores)
+
+act_scores
+mean(act_scores >= 36)
+mean(act_scores >= 30)
+mean(act_scores <= 10)
+
+mean(act_scores > (mean(act_scores) + 2*sd(act_scores)))
+
+f_x <- rnorm(10000, mean = 20.9, sd = 5.7)
+f_x
+data.frame(x, f_x) %>% ggplot(aes(x,f_x)) + geom_line()
+
+combined_data <- data.frame(10000, f_x)
+
+```
+
+
+
+```{r Modelling random variables}
+beads <- rep(c("red", "blue"), times = c(2,3))
+
+x <- ifelse(sample(beads, 1) == "blue", 1, 0)
+```
+
+```{r Polling voters}
+# sampling models 
+# casino games as well
+# 1000 people play and bet on red or black
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
