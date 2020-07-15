@@ -17,4 +17,62 @@ not sure what outer() does,
 contour() plots x, y and z
 image() works same way as contour(), but color coded based on z-value, wow!, this is aslo known as heatmap!
 persp() can also be used for 3D plots. Here, the coordinates are theta and phi
+
+
+```{r indexing data}
+
+A = matrix(1:16, 4,4)
+A
+A[2,3]
+
+A[c(1,3), c(2,4)]
+A[c(1:3), c(2:4)]
+A[,1:2]
+
+# negative sign to keep all except that variable mentioned
+
+A[-c(1,3),]
+dim(A)
+```
+
+```{r loading data}
+library(ISLR)
+
+head(Auto)
+
+names(Auto)
+# fix(Auto)
+plot(Auto$cylinders, Auto$mpg)
+
+# Alternatively, we can use attach to poin R to the file of interest
+attach(Auto)
+plot(cylinders, mpg)
+
+#na.omit delets the rows with missing values
+str(Auto)
+# number of cylinders is a qualitative variable , and as.factor() converts a quantitative variable into a qualitative variable
+
+cylinders = as.factor(cylinders)
+str(Auto)
+plot(cylinders, mpg)
+plot(cylinders, mpg, col = "red")
+plot(cylinders, mpg, col = "red", varwidth  = T)
+plot(cylinders, mpg, col = "red", varwidth  = T, horizontal  = T)
+plot(cylinders, mpg, col = "red", varwidth  = T, horizontal  = T, xlab = "cylinders", ylab = "MPG")
+
+# col = 2 has the same effect as col = "red"
+hist(mpg)
+hist(mpg, col = 2)
+hist(mpg, col = 2, breaks = 25)
+
+pairs(Auto)
+pairs(~ mpg + displacement + horsepower + weight + acceleration, Auto)
+
+plot(horsepower, mpg)
+# identify(horsepower, mpg, name)
+
+summary(Auto)
+summary(mpg)
+```
+
                              
